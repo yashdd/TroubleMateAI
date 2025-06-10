@@ -1,4 +1,4 @@
-# Troublemate
+# TroublMateAI - DevOps Assistant
 
 **Troublemate** is an AI-powered DevOps Assistant that helps engineers quickly identify root causes and suggest fixes for error logs and stack traces. It integrates your company's internal knowledge and uses smart caching with Redis to provide fast, relevant solutions.
 
