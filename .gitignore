@@ -1,0 +1,21 @@
+# Node modules
+node_modules/
+
+# Scraped data
+scraper/data/
+
+# Environment variables
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Build and temp
+dist/
+build/
+.cache/
