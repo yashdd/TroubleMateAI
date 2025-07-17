@@ -32,17 +32,6 @@ def load_index_and_metadata(source_name):
 
 
 def search_faiss(query_text, source=None, top_k=3):
-    """
-    Search across one or more FAISS indexes.
-
-    Args:
-        query_text (str): The user's input.
-        source (str or list): One source ('github') or multiple (['github', 'stack']) or None (search all).
-        top_k (int): Number of results per source.
-
-    Returns:
-        dict: source => top-k results list
-    """
     if isinstance(source, str):
         source = [source]
     elif source is None:
@@ -72,7 +61,8 @@ def search_faiss(query_text, source=None, top_k=3):
     return all_results
 
 
-# ✅ Demo CLI usage
+# Main Function to run the search
+# This part is for testing the search functionality directly
 if __name__ == "__main__":
     query = input("🔍 Enter your query: ").strip()
     results = search_faiss(query_text=query, top_k=2)

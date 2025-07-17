@@ -5,8 +5,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "scrape": "node scraper/stackoverflow.ts",
-    "start": "node index.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "scrape": "node scraper/stackoverflow.ts"
   },
   "keywords": [
     "AI",
@@ -20,16 +22,30 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/auth-helpers-react": "^0.5.0",
+    "@supabase/supabase-js": "^2.50.3",
     "axios": "^1.9.0",
     "cheerio": "^1.1.0",
+    "cross-fetch": "^4.1.0",
     "dotenv": "^16.5.0",
+    "ioredis": "^5.6.1",
+    "lucide-react": "^0.525.0",
     "node-fetch": "^3.3.2",
+    "react-markdown": "^10.1.0",
     "redis": "^5.5.6",
     "snoowrap": "^1.23.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
     "@types/cheerio": "^0.22.35",
+    "@types/next": "^8.0.7",
     "@types/node": "^24.0.0",
+    "autoprefixer": "^10.4.21",
+    "eslint-config-next": "^15.4.1",
+    "next": "^15.3.3",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.1",
     "typescript": "^5.8.3"
