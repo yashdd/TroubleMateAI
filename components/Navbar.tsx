@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { Home, MessageCircle, LogIn, UserPlus, Menu, X } from 'lucide-react';
+import { Home, MessageCircle, LogIn, UserPlus, Menu, X, LogOut, User } from 'lucide-react';
 import { useSession } from '@supabase/auth-helpers-react';
+import { supabase } from '../utils/supabaseClient';
+import { useRouter } from 'next/router';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const session = useSession();
+  const router = useRouter();
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/login');
+  };
 
   return (
     <nav className="navbar">
@@ -18,20 +26,47 @@ const Navbar: React.FC = () => {
           <a href="/" className="nav-link"><Home size={18} />Home</a>
           <a href="/chat" className="nav-link"><MessageCircle size={18} />Chat</a>
           
-          <a href="/login" className="nav-link"><LogIn size={18} />Login</a>
-          <a href="/register" className="nav-link nav-link-primary"><UserPlus size={18} />Register</a>
-        
-          
+          {!session ? (
+            <>
+              <a href="/login" className="nav-link"><LogIn size={18} />Login</a>
+              <a href="/register" className="nav-link nav-link-primary"><UserPlus size={18} />Register</a>
+            </>
+          ) : (
+            <>
+              <div className="nav-user">
+                <User size={18} />
+                <span>{session.user?.email}</span>
+              </div>
+              <button onClick={handleLogout} className="nav-link nav-link-logout">
+                <LogOut size={18} />Logout
+              </button>
+            </>
+          )}
         </div>
         <button className="mobile-menu-btn" onClick={toggleMenu}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
       <div className={`mobile-nav${isOpen ? ' mobile-nav-open' : ''}`}> 
-        <a href="#" className="mobile-nav-link"><Home size={18} />Home</a>
-        <a href="#" className="mobile-nav-link"><MessageCircle size={18} />Chat</a>
-        <a href="#" className="mobile-nav-link"><LogIn size={18} />Login</a>
-        <a href="#" className="mobile-nav-link mobile-nav-link-primary"><UserPlus size={18} />Register</a>
+        <a href="/" className="mobile-nav-link"><Home size={18} />Home</a>
+        <a href="/chat" className="mobile-nav-link"><MessageCircle size={18} />Chat</a>
+        
+        {!session ? (
+          <>
+            <a href="/login" className="mobile-nav-link"><LogIn size={18} />Login</a>
+            <a href="/register" className="mobile-nav-link mobile-nav-link-primary"><UserPlus size={18} />Register</a>
+          </>
+        ) : (
+          <>
+            <div className="mobile-nav-user">
+              <User size={18} />
+              <span>{session.user?.email}</span>
+            </div>
+            <button onClick={handleLogout} className="mobile-nav-link mobile-nav-link-logout">
+              <LogOut size={18} />Logout
+            </button>
+          </>
+        )}
       </div>
       <style jsx>{`
         .navbar {
@@ -106,6 +141,26 @@ const Navbar: React.FC = () => {
         .nav-link-primary:hover {
           background: linear-gradient(45deg, #e0e7ff, #fff);
           color: #9333ea;
+        }
+        .nav-user {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: #e0e7ff;
+          font-weight: 500;
+          padding: 0.5rem 1rem;
+          border-radius: 0.5rem;
+          background: rgba(255,255,255,0.05);
+        }
+        .nav-link-logout {
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-family: inherit;
+          font-size: inherit;
+        }
+        .nav-link-logout:hover {
+          background: rgba(255,255,255,0.15);
         }
         .mobile-menu-btn {
           display: none;
@@ -183,6 +238,29 @@ const Navbar: React.FC = () => {
           .mobile-nav-link-primary:hover {
             background: linear-gradient(45deg, #e0e7ff, #fff);
             color: #9333ea;
+          }
+          .mobile-nav-user {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #e0e7ff;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 0.5rem;
+          }
+          .mobile-nav-link-logout {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: inherit;
+            width: 100%;
+            text-align: left;
+          }
+          .mobile-nav-link-logout:hover {
+            background: rgba(255,255,255,0.15);
           }
         }
       `}</style>
