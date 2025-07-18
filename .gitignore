@@ -19,3 +19,6 @@ logs/
 dist/
 build/
 .cache/
+
+vector_store/vector_index/*.index
+vector_store/vector_index/*_meta.json
