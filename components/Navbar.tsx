@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Home, MessageCircle, LogIn, UserPlus, Menu, X, LogOut, User } from 'lucide-react';
 import { useSession } from '@supabase/auth-helpers-react';
 import { supabase } from '../utils/supabaseClient';
@@ -23,13 +24,13 @@ const Navbar: React.FC = () => {
           <span className="nav-title">Troublemate AI</span>
         </div>
         <div className="nav-links">
-          <a href="/" className="nav-link"><Home size={18} />Home</a>
-          <a href="/chat" className="nav-link"><MessageCircle size={18} />Chat</a>
+          <Link href="/" className="nav-link"><Home size={18} />Home</Link>
+          <Link href="/chat" className="nav-link"><MessageCircle size={18} />Chat</Link>
           
           {!session ? (
             <>
-              <a href="/login" className="nav-link"><LogIn size={18} />Login</a>
-              <a href="/register" className="nav-link nav-link-primary"><UserPlus size={18} />Register</a>
+              <Link href="/login" className="nav-link"><LogIn size={18} />Login</Link>
+              <Link href="/register" className="nav-link nav-link-primary"><UserPlus size={18} />Register</Link>
             </>
           ) : (
             <>
@@ -48,13 +49,13 @@ const Navbar: React.FC = () => {
         </button>
       </div>
       <div className={`mobile-nav${isOpen ? ' mobile-nav-open' : ''}`}> 
-        <a href="/" className="mobile-nav-link"><Home size={18} />Home</a>
-        <a href="/chat" className="mobile-nav-link"><MessageCircle size={18} />Chat</a>
+        <Link href="/" className="mobile-nav-link"><Home size={18} />Home</Link>
+        <Link href="/chat" className="mobile-nav-link"><MessageCircle size={18} />Chat</Link>
         
         {!session ? (
           <>
-            <a href="/login" className="mobile-nav-link"><LogIn size={18} />Login</a>
-            <a href="/register" className="mobile-nav-link mobile-nav-link-primary"><UserPlus size={18} />Register</a>
+            <Link href="/login" className="mobile-nav-link"><LogIn size={18} />Login</Link>
+            <Link href="/register" className="mobile-nav-link mobile-nav-link-primary"><UserPlus size={18} />Register</Link>
           </>
         ) : (
           <>

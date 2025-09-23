@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { supabase } from '../utils/supabaseClient';
 
 export default function RegisterForm({ onRegister }: { onRegister: () => void }) {
@@ -79,7 +80,7 @@ export default function RegisterForm({ onRegister }: { onRegister: () => void })
         {error && <p className="register-error">{error}</p>}
         
         <div className="register-footer">
-          <p>Already have an account? <a href="/login" className="register-link">Sign in</a></p>
+          <p>Already have an account? <Link href="/login" className="register-link">Sign in</Link></p>
         </div>
       </form>
       <style>{`

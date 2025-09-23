@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { supabase } from '../utils/supabaseClient';
 
 export default function LoginForm({ onLogin }: { onLogin?: () => void }) {
@@ -51,7 +52,7 @@ export default function LoginForm({ onLogin }: { onLogin?: () => void }) {
         </button>
         {error && <p className="login-error">{error}</p>}
         <div className="login-footer">
-          <p>Don't have an account? <a href="/register" className="login-link">Sign up</a></p>
+          <p>Don&apos;t have an account? <Link href="/register" className="login-link">Sign up</Link></p>
         </div>
       </form>
       <style jsx>{`
