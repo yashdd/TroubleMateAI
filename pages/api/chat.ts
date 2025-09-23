@@ -22,6 +22,40 @@ async function queryFaiss(query: string) {
   return data.results || [];
 }
 
+// Project-specific, factual context to ground answers and avoid hallucinations
+const PROJECT_FACTS = `
+You are assisting with the TroubleMateAI project. Here are verified, project-specific facts you MUST rely on when relevant:
+
+Frontend:
+- Next.js + TypeScript app with pages at /, /login, /register, /chat.
+- Auth via Supabase; session checked in pages like chat.tsx.
+- Chat UI posts to Next.js API route at /api/chat.
+
+Backend and Retrieval:
+- A Python FastAPI service (vector_store/app.py) exposes POST /query for FAISS search.
+- BACKEND_URL env var points to that service and is used by /api/chat.
+
+Caching:
+- Redis is used for caching answers via REDIS_URL (ioredis).
+
+Persistence:
+- Supabase stores chat history in table 'chats' with columns (user_id, question, answer ...).
+
+Required environment variables (set in .env.local for Next.js):
+- NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY
+- GROQ_API_KEY
+- REDIS_URL (or REDIS_HOST/REDIS_PORT/REDIS_PASSWORD for other clients)
+- BACKEND_URL (e.g., http://localhost:8000/query) and FRONTEND_URL (e.g., http://localhost:3000)
+
+Local development run sequence:
+1) Start Python retrieval API: cd vector_store && pip install fastapi uvicorn sentence-transformers faiss-cpu python-dotenv && python app.py (serves at http://localhost:8000)
+2) Start Next.js: npm run dev (serves at http://localhost:3000)
+
+Deployment guidance rules:
+- When asked about deployment for "this app", provide steps tailored to THIS project using the variables and services above. Do NOT invent services, files, or steps not present in the repo.
+- If any detail is unknown or not in these facts, say you don't know and ask a clarifying question.
+`;
+
 function buildPrompt(query: string, docs: any[], history: { role: string, content: string }[] = []) {
   let historyText = '';
   if (history.length > 0) {
@@ -40,6 +74,14 @@ IMPORTANT: Always structure your responses in this format:
 3. Solution Steps - Provide step-by-step instructions
 4. Verification - How to confirm the fix worked
 5. Prevention - How to avoid this issue in the future
+
+STRICT NON-HALLUCINATION RULES:
+- If you are not sure, say "I don't know" and ask a concise clarifying question.
+- Base answers on the provided context and the following project facts. Do NOT invent files, APIs, configs, or tools that are not present.
+- For deployment questions about THIS project, use the Project Facts exactly and avoid generic, vendor-specific guesses that are not configured here.
+
+Project Facts:
+${PROJECT_FACTS}
 
 Use the following context information to provide a comprehensive answer:
 
@@ -83,6 +125,8 @@ Your responses should be:
 - Explain the reasoning behind recommendations
 - Consider security implications
 - Provide verification steps
+- Never hallucinate tools, files, or steps. If information is missing, say you don't know and ask a clarifying question.
+- When the user's question is about deploying THIS app, respond using the provided Project Facts and environment variables; do not invent services.
 - For "Hi Hello" type of questions, just say "Hello, how can I help you today?"
 - For "How are you" type of questions, just say "I'm doing great, thank you for asking!"
 - For "What is your name" type of questions, just say "I'm Troublemate AI, your AI assistant!"
